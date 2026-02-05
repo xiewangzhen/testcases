@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Case Portfolio | Liu Xuanyi</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --primary-color: #38bdf8;
+            --secondary-color: #818cf8;
+            --text-main: #f1f5f9;
+            --text-sub: #94a3b8;
+            --border-color: #334155;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- Header --- */
+        header {
+            text-align: center;
+            padding: 3rem 1rem;
+            background: radial-gradient(circle at top, #1e293b 0%, #0f172a 100%);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            margin: 0 0 0.5rem 0;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            color: var(--text-sub);
+            font-size: 1rem;
+        }
+
+        /* --- Breadcrumb Navigation (面包屑) --- */
+        .breadcrumb-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            font-size: 0.9rem;
+            color: var(--text-sub);
+        }
+
+        .breadcrumb span {
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .breadcrumb span:hover {
+            color: var(--primary-color);
+        }
+
+        .breadcrumb .separator {
+            margin: 0 0.5rem;
+            color: #475569;
+            cursor: default;
+        }
+
+        .breadcrumb .current {
+            color: var(--primary-color);
+            font-weight: 600;
+            cursor: default;
+        }
+
+        /* --- Main Layout --- */
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem 4rem 2rem;
+            width: 100%;
+            box-sizing: border-box;
+            flex-grow: 1;
+        }
+
+        /* View Section Logic */
+        .view-section {
+            display: none; /* 默认隐藏所有视图 */
+            animation: fadeIn 0.4s ease;
+        }
+
+        .view-section.active {
+            display: block; /* 激活时显示 */
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Grid System */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 1rem;
+        }
+
+        /* --- Category Cards (首页大分类) --- */
+        .category-card {
+            background: linear-gradient(145deg, #1e293b, #162032);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-color);
+            box-shadow: 0 10px 30px rgba(56, 189, 248, 0.15);
+        }
+
+        .cat-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+
+        .cat-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 0.5rem;
+        }
+
+        .cat-desc {
+            color: var(--text-sub);
+            font-size: 0.95rem;
+        }
+
+        .cat-count {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(56, 189, 248, 0.1);
+            color: var(--primary-color);
+            padding: 2px 10px;
+            border-radius: 10px;
+            font-size: 0.8rem;
+        }
+
+        /* --- Item Cards (具体用例卡片) --- */
+        .item-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .item-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-color);
+        }
+
+        .preview-box {
+            height: 160px;
+            background-color: #334155;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .preview-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .item-card:hover .preview-box img {
+            transform: scale(1.05);
+        }
+
+        .card-body {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .card-title {
+            margin: 0 0 0.5rem 0;
+            font-size: 1.2rem;
+        }
+
+        .card-text {
+            color: var(--text-sub);
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+            flex-grow: 1;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 0.5rem;
+            text-align: center;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 0.85rem;
+            cursor: pointer;
+            border: none;
+            transition: background 0.2s;
+        }
+
+        .btn-primary { background: var(--primary-color); color: #0f172a; font-weight: 600; }
+        .btn-primary:hover { background: #7dd3fc; }
+        .btn-outline { border: 1px solid #475569; color: var(--text-main); display: flex; align-items: center; justify-content: center; }
+        .btn-outline:hover { background: #334155; }
+
+        /* --- Lightbox --- */
+        #lightbox {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        #lightbox.active { display: flex; }
+        #lightbox img { max-width: 90%; max-height: 85vh; border-radius: 8px; box-shadow: 0 0 50px rgba(0,0,0,0.5); }
+        .close-lb { position: absolute; top: 20px; right: 30px; color: white; font-size: 2rem; cursor: pointer; }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Liu Xuanyi's Portfolio</h1>
+        <p class="subtitle">测试开发工程师 · Test Case Design & Architecture</p>
+    </header>
+
+    <div class="breadcrumb-container">
+        <div class="breadcrumb" id="breadcrumb-nav">
+            <span class="current">首页 Home</span>
+        </div>
+    </div>
+
+    <main>
+        <section id="view-home" class="view-section active">
+            <div class="grid">
+                <div class="category-card" onclick="navigateTo('business')">
+                    <span class="cat-count">3 items</span>
+                    <div class="cat-icon">🏢</div>
+                    <div class="cat-title">业务功能测试</div>
+                    <div class="cat-desc">包含登录、购物车、搜索等核心业务模块的功能逻辑覆盖。</div>
+                </div>
+
+                <div class="category-card" onclick="navigateTo('scenario')">
+                    <span class="cat-count">2 items</span>
+                    <div class="cat-icon">💥</div>
+                    <div class="cat-title">异常场景测试</div>
+                    <div class="cat-desc">支付中断、弱网、高并发等复杂业务场景下的健壮性测试。</div>
+                </div>
+
+                <div class="category-card" onclick="navigateTo('framework')">
+                    <span class="cat-count">1 item</span>
+                    <div class="cat-icon">🛠️</div>
+                    <div class="cat-title">测试架构 & 工具</div>
+                    <div class="cat-desc">接口自动化框架设计、CICD 流水线配置与质量门禁。</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="view-business" class="view-section">
+            <div class="grid">
+                <article class="item-card">
+                    <div class="preview-box" onclick="openLightbox('assets/images/login-case.png')">
+                        <img src="assets/images/login-case.png" alt="登录测试">
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title">用户登录模块</h3>
+                        <p class="card-text">覆盖SSO单点登录、OAuth2.0授权、多端互踢机制及异常输入校验。</p>
+                        <div class="btn-group">
+                            <button class="btn btn-primary" onclick="openLightbox('assets/images/login-case.png')">预览脑图</button>
+                            <a href="assets/files/login.xmind" class="btn btn-outline" download>下载 Xmind</a>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="item-card">
+                    <div class="preview-box" onclick="openLightbox('assets/images/search-case.png')">
+                        <img src="assets/images/search-case.png" alt="搜索测试">
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title">商品搜索模块</h3>
+                        <p class="card-text">包含联想词推荐、特殊字符过滤、结果排序权重及筛选器组合测试。</p>
+                        <div class="btn-group">
+                            <button class="btn btn-primary" onclick="openLightbox('assets/images/search-case.png')">预览脑图</button>
+                            <a href="assets/files/search.xmind" class="btn btn-outline" download>下载 Xmind</a>
+                        </div>
+                    </div>
+                </article>
+                
+                <article class="item-card">
+                    <div class="preview-box" onclick="openLightbox('assets/images/cart-case.png')">
+                        <img src="assets/images/cart-case.png" alt="购物车测试">
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title">购物车逻辑</h3>
+                        <p class="card-text">商品失效处理、价格变动提示、最大SKU数量限制及库存预占逻辑。</p>
+                        <div class="btn-group">
+                            <button class="btn btn-primary" onclick="openLightbox('assets/images/cart-case.png')">预览脑图</button>
+                            <a href="assets/files/cart.xmind" class="btn btn-outline" download>下载 Xmind</a>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <section id="view-scenario" class="view-section">
+            <div class="grid">
+                <article class="item-card">
+                    <div class="preview-box" onclick="openLightbox('assets/images/payment-case.png')">
+                        <img src="assets/images/payment-case.png" alt="支付异常">
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title">订单支付异常流</h3>
+                        <p class="card-text">第三方回调延迟、重复回调幂等性校验、金额篡改攻防测试。</p>
+                        <div class="btn-group">
+                            <button class="btn btn-primary" onclick="openLightbox('assets/images/payment-case.png')">预览脑图</button>
+                            <a href="assets/files/payment.xmind" class="btn btn-outline" download>下载 Xmind</a>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="item-card">
+                    <div class="preview-box" onclick="openLightbox('assets/images/concurrency.png')">
+                        <img src="assets/images/concurrency.png" alt="并发测试">
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title">秒杀库存并发</h3>
+                        <p class="card-text">针对 Redis 库存预扣减与 DB 数据一致性的高并发场景设计。</p>
+                        <div class="btn-group">
+                            <button class="btn btn-primary" onclick="openLightbox('assets/images/concurrency.png')">预览脑图</button>
+                            <a href="assets/files/concurrency.xmind" class="btn btn-outline" download>下载 Xmind</a>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <section id="view-framework" class="view-section">
+            <div class="grid">
+                <article class="item-card">
+                    <div class="preview-box" onclick="openLightbox('assets/images/api-framework.png')">
+                        <img src="assets/images/api-framework.png" alt="框架设计">
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title">API 自动化测试框架</h3>
+                        <p class="card-text">基于 Pytest + Allure + Requests 的分层设计，实现数据驱动测试。</p>
+                        <div class="btn-group">
+                            <button class="btn btn-primary" onclick="openLightbox('assets/images/api-framework.png')">预览脑图</button>
+                            <a href="assets/files/framework.xmind" class="btn btn-outline" download>下载 Xmind</a>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+    </main>
+
+    <div id="lightbox" onclick="closeLightbox(event)">
+        <div class="close-lb" onclick="closeLightbox(event)">×</div>
+        <img id="lb-img" src="" alt="Full Preview">
+    </div>
+
+    <script>
+        // 定义页面层级名称映射
+        const viewTitles = {
+            'home': '首页 Home',
+            'business': '业务功能测试 Business Logic',
+            'scenario': '异常场景测试 Scenario Cases',
+            'framework': '架构设计 Architecture'
+        };
+
+        // 核心导航函数
+        function navigateTo(viewId) {
+            // 1. 隐藏所有 section
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+            
+            // 2. 显示目标 section
+            const target = document.getElementById('view-' + viewId);
+            if (target) {
+                target.classList.add('active');
+            }
+
+            // 3. 更新面包屑
+            updateBreadcrumb(viewId);
+
+            // 4. 更新 URL 历史记录 (支持浏览器后退)
+            // 避免重复 push 相同的 state
+            if (!history.state || history.state.view !== viewId) {
+                history.pushState({ view: viewId }, null, `?view=${viewId}`);
+            }
+
+            // 滚动到顶部
+            window.scrollTo(0, 0);
+        }
+
+        // 更新面包屑 UI
+        function updateBreadcrumb(viewId) {
+            const nav = document.getElementById('breadcrumb-nav');
+            if (viewId === 'home') {
+                nav.innerHTML = `<span class="current">首页 Home</span>`;
+            } else {
+                nav.innerHTML = `
+                    <span onclick="navigateTo('home')">首页 Home</span>
+                    <span class="separator">/</span>
+                    <span class="current">${viewTitles[viewId] || 'Details'}</span>
+                `;
+            }
+        }
+
+        // 监听浏览器后退按钮
+        window.addEventListener('popstate', (event) => {
+            const state = event.state;
+            if (state && state.view) {
+                // 如果有状态，恢复到该状态（不push历史，只切换UI）
+                restoreView(state.view);
+            } else {
+                // 默认回首页
+                restoreView('home');
+            }
+        });
+
+        // 恢复视图（不操作history）
+        function restoreView(viewId) {
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+            const target = document.getElementById('view-' + viewId);
+            if(target) target.classList.add('active');
+            updateBreadcrumb(viewId);
+        }
+
+        // --- Lightbox 逻辑 ---
+        function openLightbox(src) {
+            document.getElementById('lb-img').src = src;
+            document.getElementById('lightbox').classList.add('active');
+        }
+
+        function closeLightbox(e) {
+            // 只有点击背景或关闭按钮才关闭
+            if(e.target.id === 'lightbox' || e.target.classList.contains('close-lb')) {
+                document.getElementById('lightbox').classList.remove('active');
+            }
+        }
+
+        // 初始化：检查 URL 参数，如果有 ?view=business 直接跳转，否则显示首页
+        const urlParams = new URLSearchParams(window.location.search);
+        const initialView = urlParams.get('view') || 'home';
+        restoreView(initialView);
+
+    </script>
+</body>
+</html>
