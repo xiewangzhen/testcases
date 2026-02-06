@@ -3,294 +3,297 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test Case Portfolio | Liu Xuanyi</title>
+    <title>Interface Test Portfolio | Liu Xuanyi</title>
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/viewerjs/1.11.6/viewer.min.css">
 
     <style>
+        /* --- 核心样式 (保持深色科技风) --- */
         :root {
             --bg-color: #0f172a;
             --card-bg: #1e293b;
-            --primary-color: #38bdf8;
-            --secondary-color: #818cf8;
-            --text-main: #f1f5f9;
+            --primary-color: #0ea5e9; /* 更亮一点的蓝 */
+            --secondary-color: #6366f1;
+            --text-main: #f8fafc;
             --text-sub: #94a3b8;
             --border-color: #334155;
         }
 
         body {
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-main);
-            margin: 0;
-            padding: 0;
-            line-height: 1.6;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
+            margin: 0; padding: 0; line-height: 1.6;
+            min-height: 100vh; display: flex; flex-direction: column;
         }
 
-        /* --- Header --- */
+        /* Header */
         header {
-            text-align: center;
-            padding: 3rem 1rem;
-            background: radial-gradient(circle at top, #1e293b 0%, #0f172a 100%);
+            text-align: center; padding: 4rem 1rem 3rem;
+            background: radial-gradient(circle at 50% 0%, #1e293b 0%, #0f172a 80%);
             border-bottom: 1px solid var(--border-color);
         }
-
         h1 {
-            font-size: 2.2rem;
-            margin: 0 0 0.5rem 0;
-            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            font-size: 2.5rem; margin: 0 0 0.5rem 0; letter-spacing: -1px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
+        .subtitle { color: var(--text-sub); font-size: 1.1rem; max-width: 600px; margin: 0 auto; }
 
-        .subtitle {
-            color: var(--text-sub);
-            font-size: 1rem;
+        /* Navigation / Breadcrumb */
+        .nav-bar {
+            max-width: 1200px; margin: 0 auto; padding: 1.5rem 2rem; width: 100%; box-sizing: border-box;
+            display: flex; align-items: center; font-size: 0.95rem; color: var(--text-sub);
         }
+        .nav-item { cursor: pointer; transition: color 0.2s; }
+        .nav-item:hover { color: var(--primary-color); }
+        .nav-sep { margin: 0 0.8rem; color: #475569; }
+        .nav-current { color: var(--primary-color); font-weight: 600; }
 
-        /* --- Breadcrumb Navigation --- */
-        .breadcrumb-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 1rem 2rem;
-            width: 100%;
-            box-sizing: border-box;
+        /* Main Content */
+        main { flex-grow: 1; max-width: 1200px; margin: 0 auto; padding: 0 2rem 5rem; width: 100%; box-sizing: border-box; }
+
+        /* Sections & Transitions */
+        .view-section { display: none; animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
+        .view-section.active { display: block; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Grid */
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; margin-top: 1rem; }
+
+        /* Category Cards (Home) */
+        .cat-card {
+            background: linear-gradient(145deg, #1e293b, #0f172a);
+            border: 1px solid var(--border-color); border-radius: 16px; padding: 2.5rem 2rem;
+            text-align: center; cursor: pointer; transition: all 0.3s ease; position: relative; overflow: hidden;
         }
+        .cat-card:hover { transform: translateY(-5px); border-color: var(--primary-color); box-shadow: 0 20px 40px -10px rgba(14, 165, 233, 0.2); }
+        .cat-icon { font-size: 3.5rem; margin-bottom: 1.5rem; display: inline-block; filter: drop-shadow(0 0 10px rgba(255,255,255,0.1)); }
+        .cat-title { font-size: 1.4rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.8rem; }
+        .cat-desc { color: var(--text-sub); font-size: 0.95rem; line-height: 1.6; }
+        .badge { position: absolute; top: 1rem; right: 1rem; background: rgba(14, 165, 233, 0.15); color: var(--primary-color); padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
 
-        .breadcrumb {
-            display: flex;
-            align-items: center;
-            font-size: 0.9rem;
-            color: var(--text-sub);
-        }
-
-        .breadcrumb span {
-            cursor: pointer;
-            transition: color 0.2s;
-        }
-
-        .breadcrumb span:hover {
-            color: var(--primary-color);
-        }
-
-        .breadcrumb .separator {
-            margin: 0 0.5rem;
-            color: #475569;
-            cursor: default;
-        }
-
-        .breadcrumb .current {
-            color: var(--primary-color);
-            font-weight: 600;
-            cursor: default;
-        }
-
-        /* --- Main Layout --- */
-        main {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem 4rem 2rem;
-            width: 100%;
-            box-sizing: border-box;
-            flex-grow: 1;
-        }
-
-        /* View Section Logic */
-        .view-section {
-            display: none;
-            animation: fadeIn 0.4s ease;
-        }
-
-        .view-section.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-top: 1rem;
-        }
-
-        /* --- Category Cards --- */
-        .category-card {
-            background: linear-gradient(145deg, #1e293b, #162032);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 2rem;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .category-card:hover {
-            transform: translateY(-5px);
-            border-color: var(--primary-color);
-            box-shadow: 0 10px 30px rgba(56, 189, 248, 0.15);
-        }
-
-        .cat-icon { font-size: 3rem; margin-bottom: 1rem; display: inline-block; }
-        .cat-title { font-size: 1.5rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.5rem; }
-        .cat-desc { color: var(--text-sub); font-size: 0.95rem; }
-        .cat-count { position: absolute; top: 1rem; right: 1rem; background: rgba(56, 189, 248, 0.1); color: var(--primary-color); padding: 2px 10px; border-radius: 10px; font-size: 0.8rem; }
-
-        /* --- Item Cards --- */
+        /* Detail Cards */
         .item-card {
-            background-color: var(--card-bg);
-            border-radius: 12px;
-            overflow: hidden;
-            border: 1px solid var(--border-color);
-            transition: transform 0.3s;
-            display: flex;
-            flex-direction: column;
+            background-color: var(--card-bg); border-radius: 12px; overflow: hidden;
+            border: 1px solid var(--border-color); transition: transform 0.3s;
+            display: flex; flex-direction: column; height: 100%;
         }
-
-        .item-card:hover {
-            transform: translateY(-5px);
-            border-color: var(--primary-color);
-        }
+        .item-card:hover { transform: translateY(-5px); border-color: var(--primary-color); }
 
         .preview-box {
-            height: 180px;
-            background-color: #334155;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            cursor: zoom-in; /* 鼠标变成放大镜 */
-            position: relative;
+            height: 200px; background-color: #020617; position: relative; overflow: hidden; cursor: zoom-in;
+            display: flex; align-items: center; justify-content: center;
         }
-
-        .preview-box img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: opacity 0.3s;
-        }
-
-        /* 给预览图加一个遮罩提示 */
+        .preview-box img { width: 100%; height: 100%; object-fit: cover; transition: opacity 0.3s, transform 0.5s; }
+        .item-card:hover .preview-box img { transform: scale(1.05); }
         .preview-overlay {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transition: opacity 0.3s;
+            position: absolute; inset: 0; background: rgba(0,0,0,0.4);
+            display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s;
         }
-        
         .preview-box:hover .preview-overlay { opacity: 1; }
-        .preview-overlay span {
-            background: rgba(0,0,0,0.6);
-            color: white;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            backdrop-filter: blur(4px);
-        }
+        .preview-btn { background: rgba(255,255,255,0.2); backdrop-filter: blur(5px); padding: 8px 16px; border-radius: 30px; font-size: 0.9rem; color: white; display: flex; align-items: center; gap: 6px; }
 
         .card-body { padding: 1.5rem; display: flex; flex-direction: column; flex-grow: 1; }
-        .card-title { margin: 0 0 0.5rem 0; font-size: 1.2rem; }
-        .card-text { color: var(--text-sub); font-size: 0.9rem; margin-bottom: 1.5rem; flex-grow: 1; }
-        
-        .btn-group { display: flex; gap: 10px; }
-        .btn { flex: 1; padding: 0.6rem; text-align: center; border-radius: 6px; text-decoration: none; font-size: 0.9rem; cursor: pointer; border: none; transition: background 0.2s; font-weight: 500; }
-        .btn-primary { background: var(--primary-color); color: #0f172a; }
-        .btn-primary:hover { background: #7dd3fc; }
-        .btn-outline { border: 1px solid #475569; color: var(--text-main); display: flex; align-items: center; justify-content: center; }
-        .btn-outline:hover { background: #334155; }
+        .card-tag { display: inline-block; background: rgba(99, 102, 241, 0.1); color: #818cf8; font-size: 0.75rem; padding: 2px 8px; border-radius: 4px; margin-bottom: 0.8rem; align-self: flex-start; }
+        .card-title { margin: 0 0 0.8rem 0; font-size: 1.25rem; font-weight: 600; line-height: 1.4; }
+        .card-desc { color: var(--text-sub); font-size: 0.9rem; margin-bottom: 1.5rem; flex-grow: 1; }
 
-        /* Viewer.js 定制样式 */
-        .viewer-backdrop { background-color: rgba(15, 23, 42, 0.95) !important; }
-        .viewer-title { color: #ccc; }
+        /* Actions */
+        .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: auto; }
+        .btn {
+            padding: 0.7rem; text-align: center; border-radius: 8px; text-decoration: none; font-size: 0.9rem; font-weight: 500; cursor: pointer; border: none; transition: all 0.2s;
+            display: flex; align-items: center; justify-content: center; gap: 6px;
+        }
+        .btn-primary { background: var(--primary-color); color: #0f172a; }
+        .btn-primary:hover { background: #38bdf8; filter: brightness(1.1); }
+        .btn-outline { border: 1px solid #475569; color: var(--text-main); background: transparent; }
+        .btn-outline:hover { background: rgba(255,255,255,0.05); border-color: var(--text-sub); }
+
+        /* Viewer & Footer */
+        .viewer-backdrop { background-color: rgba(15, 23, 42, 0.98) !important; }
+        footer { text-align: center; padding: 3rem; color: #475569; font-size: 0.85rem; border-top: 1px solid var(--border-color); margin-top: 3rem; }
     </style>
 </head>
 <body>
 
     <header>
         <h1>Liu Xuanyi's Portfolio</h1>
-        <p class="subtitle">测试开发工程师 · Test Case Design & Architecture</p>
+        <p class="subtitle">测试开发工程师 · 接口测试 | 自动化测试 | CI/CD</p>
     </header>
 
-    <div class="breadcrumb-container">
-        <div class="breadcrumb" id="breadcrumb-nav">
-            <span class="current">首页 Home</span>
+    <div class="nav-bar">
+        <div id="breadcrumb-nav">
+            <span class="nav-current">首页 Dashboard</span>
         </div>
     </div>
 
     <main>
         <section id="view-home" class="view-section active">
             <div class="grid">
-                <div class="category-card" onclick="navigateTo('business')">
-                    <span class="cat-count">3 items</span>
-                    <div class="cat-icon">🏢</div>
-                    <div class="cat-title">业务功能测试</div>
-                    <div class="cat-desc">登录、购物车、搜索等核心业务模块的功能覆盖。</div>
+                <div class="cat-card" onclick="navigateTo('api')">
+                    <span class="badge">4 Modules</span>
+                    <div class="cat-icon">🧩</div>
+                    <div class="cat-title">接口测试用例设计</div>
+                    <div class="cat-desc">
+                        覆盖登录鉴权、自习室管理、状态流转及文件服务。<br>
+                        重点关注：<span style="color:#818cf8">参数校验、边界值、幂等性</span>。
+                    </div>
                 </div>
 
-                <div class="category-card" onclick="navigateTo('scenario')">
-                    <span class="cat-count">2 items</span>
-                    <div class="cat-icon">💥</div>
-                    <div class="cat-title">异常场景测试</div>
-                    <div class="cat-desc">支付中断、弱网、高并发等健壮性测试。</div>
+                <div class="cat-card" onclick="navigateTo('flow')">
+                    <span class="badge">2 Scenarios</span>
+                    <div class="cat-icon">🔄</div>
+                    <div class="cat-title">复杂业务场景流</div>
+                    <div class="cat-desc">
+                        基于状态机的业务闭环测试。<br>
+                        重点关注：<span style="color:#818cf8">状态迁移合法性、并发抢座、数据一致性</span>。
+                    </div>
                 </div>
 
-                <div class="category-card" onclick="navigateTo('framework')">
-                    <span class="cat-count">1 item</span>
-                    <div class="cat-icon">🛠️</div>
-                    <div class="cat-title">测试架构 & 工具</div>
-                    <div class="cat-desc">接口自动化框架设计、流水线配置。</div>
+                <div class="cat-card" onclick="navigateTo('framework')">
+                    <span class="badge">Architecture</span>
+                    <div class="cat-icon">⚙️</div>
+                    <div class="cat-title">自动化架构 & CI/CD</div>
+                    <div class="cat-desc">
+                        基于 Pytest + Allure 的分层测试框架设计。<br>
+                        集成 Jenkins 流水线实现无人值守测试。
+                    </div>
                 </div>
             </div>
         </section>
 
-        <section id="view-business" class="view-section">
+        <section id="view-api" class="view-section">
             <div class="grid">
+                
                 <article class="item-card">
                     <div class="preview-box" onclick="viewImage(this)">
-                        <img src="assets/images/login-case.png" alt="用户登录模块测试用例">
-                        <div class="preview-overlay"><span>🔍 点击放大预览</span></div>
+                        <img src="assets/images/login.png" alt="登录接口测试">
+                        <div class="preview-overlay"><span class="preview-btn">🔍 放大预览</span></div>
                     </div>
                     <div class="card-body">
-                        <h3 class="card-title">用户登录模块</h3>
-                        <p class="card-text">覆盖SSO单点登录、OAuth2.0授权、多端互踢机制及异常输入校验。</p>
-                        <div class="btn-group">
+                        <span class="card-tag">Auth & Security</span>
+                        <h3 class="card-title">用户鉴权模块</h3>
+                        <p class="card-desc">
+                            包含 <code>登录功能.xmind</code> 与 <code>登录接口.xmind</code>。
+                            测试点涵盖：密码加密传输、Token 生成与有效期、SQL 注入拦截、多端互踢机制及异常入参校验。
+                        </p>
+                        <div class="actions">
                             <button class="btn btn-primary" onclick="triggerImgClick(this)">预览脑图</button>
-                            <a href="assets/files/login.xmind" class="btn btn-outline" download>下载 Xmind</a>
+                            <a href="assets/files/登录接口.xmind" class="btn btn-outline" download>下载 Xmind</a>
                         </div>
                     </div>
                 </article>
 
-                </div>
+                <article class="item-card">
+                    <div class="preview-box" onclick="viewImage(this)">
+                        <img src="assets/images/create-room.png" alt="创建自习室">
+                        <div class="preview-overlay"><span class="preview-btn">🔍 放大预览</span></div>
+                    </div>
+                    <div class="card-body">
+                        <span class="card-tag">Core Service</span>
+                        <h3 class="card-title">自习室管理服务</h3>
+                        <p class="card-desc">
+                            基于 <code>创建自习室接口.xmind</code>。
+                            测试点涵盖：必填项校验、字段长度边界值、管理员权限管控、重复创建幂等性校验。
+                        </p>
+                        <div class="actions">
+                            <button class="btn btn-primary" onclick="triggerImgClick(this)">预览脑图</button>
+                            <a href="assets/files/创建自习室接口.xmind" class="btn btn-outline" download>下载 Xmind</a>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="item-card">
+                    <div class="preview-box" id="gallery-room" onclick="viewGallery('gallery-room')">
+                        
+                        <img src="assets/images/add-room.png" alt="加入自习室接口" style="display: block;">
+                        <img src="assets/images/start-study.png" alt="开始学习接口" style="display: none;">
+                        <img src="assets/images/stop-study.png" alt="暂停学习接口" style="display: none;">
+                        <img src="assets/images/end-study.png" alt="结束学习接口" style="display: none;">
+
+                        <div class="preview-overlay">
+                            <span class="preview-btn">📸 查看图集 (4张)</span>
+                        </div>
+                    </div>
+                    
+                    <div class="card-body">
+                        <span class="card-tag">Core Service</span>
+                        <h3 class="card-title">学习生命周期管理</h3>
+                        <p class="card-desc">
+                            聚合了自习室的加入，学习计时的开始/暂停/结束全套接口测试。
+                            <br>包含：自习室的加入，学习计时的开始/暂停/结束状态流转。
+                        </p>
+                        <div class="actions">
+                            <button class="btn btn-primary" onclick="viewGallery('gallery-room')">预览全套脑图</button>
+                            <a href="assets/files/自习室.xmind" class="btn btn-outline" download>下载 Xmind</a>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="item-card">
+                    <div class="preview-box" onclick="viewImage(this)">
+                        <img src="assets/images/upload.png" alt="文件上传">
+                        <div class="preview-overlay"><span class="preview-btn">🔍 放大预览</span></div>
+                    </div>
+                    <div class="card-body">
+                        <span class="card-tag">Utility Service</span>
+                        <h3 class="card-title">文件上传服务</h3>
+                        <p class="card-desc">
+                            基于 <code>文件上传接口.xmind</code>。
+                            测试点涵盖：MIME Type 白名单校验、文件大小阈值限制、恶意脚本文件识别、OSS 回调延迟处理。
+                        </p>
+                        <div class="actions">
+                            <button class="btn btn-primary" onclick="triggerImgClick(this)">预览脑图</button>
+                            <a href="assets/files/文件上传接口.xmind" class="btn btn-outline" download>下载 Xmind</a>
+                        </div>
+                    </div>
+                </article>
+
+            </div>
         </section>
 
-        <section id="view-scenario" class="view-section">
+        <section id="view-flow" class="view-section">
             <div class="grid">
+
                 <article class="item-card">
                     <div class="preview-box" onclick="viewImage(this)">
-                        <img src="assets/images/payment-case.png" alt="订单支付异常流分析">
-                        <div class="preview-overlay"><span>🔍 点击放大预览</span></div>
+                        <img src="assets/images/study-flow.png" alt="学习状态流转">
+                        <div class="preview-overlay"><span class="preview-btn">🔍 放大预览</span></div>
                     </div>
                     <div class="card-body">
-                        <h3 class="card-title">订单支付异常流</h3>
-                        <p class="card-text">第三方回调延迟、重复回调幂等性校验、金额篡改攻防测试。</p>
-                        <div class="btn-group">
+                        <span class="card-tag">State Machine</span>
+                        <h3 class="card-title">学习生命周期状态机</h3>
+                        <p class="card-desc">
+                            整合 <code>自习室学习.xmind</code> 及 开始/暂停/结束 接口。
+                            <br><strong>核心测试点：</strong>验证状态迁移合法性（如 Free -> Occupied -> Paused），防止非法跳跃（如未开始直接结束），以及计时准确性。
+                        </p>
+                        <div class="actions">
                             <button class="btn btn-primary" onclick="triggerImgClick(this)">预览脑图</button>
-                            <a href="assets/files/payment.xmind" class="btn btn-outline" download>下载 Xmind</a>
+                            <a href="assets/files/自习室学习.xmind" class="btn btn-outline" download>下载 Xmind</a>
                         </div>
                     </div>
                 </article>
+
+                <article class="item-card">
+                    <div class="preview-box" onclick="viewImage(this)">
+                        <img src="assets/images/join-room.png" alt="加入自习室">
+                        <div class="preview-overlay"><span class="preview-btn">🔍 放大预览</span></div>
+                    </div>
+                    <div class="card-body">
+                        <span class="card-tag">Concurrency</span>
+                        <h3 class="card-title">加入自习室与并发抢座</h3>
+                        <p class="card-desc">
+                            基于 <code>加入自习室接口.xmind</code>。
+                            <br><strong>核心测试点：</strong>模拟多用户并发请求同一座位，验证 Redis 锁机制，确保无超卖现象；验证黑名单用户拦截逻辑。
+                        </p>
+                        <div class="actions">
+                            <button class="btn btn-primary" onclick="triggerImgClick(this)">预览脑图</button>
+                            <a href="assets/files/加入自习室接口.xmind" class="btn btn-outline" download>下载 Xmind</a>
+                        </div>
+                    </div>
+                </article>
+
             </div>
         </section>
 
@@ -298,15 +301,19 @@
             <div class="grid">
                 <article class="item-card">
                     <div class="preview-box" onclick="viewImage(this)">
-                        <img src="assets/images/api-framework.png" alt="API自动化测试框架设计">
-                        <div class="preview-overlay"><span>🔍 点击放大预览</span></div>
+                        <img src="assets/images/framework.png" alt="自动化架构">
+                        <div class="preview-overlay"><span class="preview-btn">🔍 放大预览</span></div>
                     </div>
                     <div class="card-body">
-                        <h3 class="card-title">API 自动化测试框架</h3>
-                        <p class="card-text">基于 Pytest + Allure + Requests 的分层设计，实现数据驱动测试。</p>
-                        <div class="btn-group">
+                        <span class="card-tag">Pytest + Allure</span>
+                        <h3 class="card-title">接口自动化测试框架</h3>
+                        <p class="card-desc">
+                            基于 PO 模式分层设计。上述 Xmind 用例已全部转化为自动化脚本。
+                            <br><strong>亮点：</strong>使用 Fixture 进行数据初始化与清理，实现数据驱动（Data-Driven）测试。
+                        </p>
+                        <div class="actions">
                             <button class="btn btn-primary" onclick="triggerImgClick(this)">预览架构</button>
-                            <a href="assets/files/framework.xmind" class="btn btn-outline" download>下载 Xmind</a>
+                            <a href="#" class="btn btn-outline">查看 GitHub</a>
                         </div>
                     </div>
                 </article>
@@ -315,22 +322,28 @@
 
     </main>
 
+    <footer>
+        Designed & Built by Liu Xuanyi. Powered by Netlify.
+    </footer>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/viewerjs/1.11.6/viewer.min.js"></script>
 
     <script>
-        // --- 视图导航逻辑 (保持不变) ---
+        // --- 1. 路由与导航逻辑 ---
         const viewTitles = {
-            'home': '首页 Home',
-            'business': '业务功能测试 Business',
-            'scenario': '异常场景测试 Scenario',
-            'framework': '架构设计 Architecture'
+            'home': '首页 Dashboard',
+            'api': '单接口测试 Interface Modules',
+            'flow': '业务场景流 Business Scenarios',
+            'framework': '测试架构 Architecture'
         };
 
         function navigateTo(viewId) {
             document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
             const target = document.getElementById('view-' + viewId);
             if (target) target.classList.add('active');
+            
             updateBreadcrumb(viewId);
+            
             if (!history.state || history.state.view !== viewId) {
                 history.pushState({ view: viewId }, null, `?view=${viewId}`);
             }
@@ -340,76 +353,63 @@
         function updateBreadcrumb(viewId) {
             const nav = document.getElementById('breadcrumb-nav');
             if (viewId === 'home') {
-                nav.innerHTML = `<span class="current">首页 Home</span>`;
+                nav.innerHTML = `<span class="nav-current">首页 Dashboard</span>`;
             } else {
-                nav.innerHTML = `<span onclick="navigateTo('home')">首页 Home</span><span class="separator">/</span><span class="current">${viewTitles[viewId] || 'Details'}</span>`;
+                nav.innerHTML = `
+                    <span class="nav-item" onclick="navigateTo('home')">首页 Dashboard</span>
+                    <span class="nav-sep">/</span>
+                    <span class="nav-current">${viewTitles[viewId]}</span>
+                `;
             }
         }
 
         window.addEventListener('popstate', (event) => {
-            if (event.state && event.state.view) {
-                navigateTo(event.state.view); // 这里需要修改navigateTo避免死循环pushState，但简化起见，直接复用显示逻辑
-                // 简单的复用恢复逻辑：
-                document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
-                const target = document.getElementById('view-' + event.state.view);
-                if(target) target.classList.add('active');
-                updateBreadcrumb(event.state.view);
-            } else {
-                // 回首页
-                document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
-                document.getElementById('view-home').classList.add('active');
-                updateBreadcrumb('home');
-            }
+            const view = event.state && event.state.view ? event.state.view : 'home';
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+            const target = document.getElementById('view-' + view);
+            if (target) target.classList.add('active');
+            updateBreadcrumb(view);
         });
 
-        // --- 3. 核心：Viewer.js 图片查看逻辑 ---
-        
-        // 辅助：按钮点击时触发图片的点击
+        // --- 2. 单张图片预览逻辑 ---
         function triggerImgClick(btn) {
-            // 找到同个卡片内的图片容器点击
             const card = btn.closest('.item-card');
-            const imgBox = card.querySelector('.preview-box');
-            viewImage(imgBox);
+            viewImage(card.querySelector('.preview-box'));
         }
 
         function viewImage(element) {
             const img = element.querySelector('img');
-            
-            // 实例化 Viewer (单次模式)
             const viewer = new Viewer(img, {
-                navbar: false,       // 只有一张图，不需要底部缩略图导航
-                toolbar: {           // 自定义工具栏
-                    zoomIn: 1,
-                    zoomOut: 1,
-                    oneToOne: 1,     // 1:1 原图比例
-                    reset: 1,
-                    rotateLeft: 1,   // 旋转功能 (对脑图很有用)
-                    flipHorizontal: 1,
-                    play: 0          // 不需要播放幻灯片
-                },
-                title: true,         // 显示图片的 alt 属性作为标题
-                className: 'custom-viewer', // 方便自定义CSS
-                
-                // 监听隐藏事件：销毁实例，清理内存
-                hidden: function () {
-                    viewer.destroy();
-                }
+                navbar: false,
+                toolbar: { zoomIn:1, zoomOut:1, oneToOne:1, reset:1, rotateLeft:1, flipHorizontal:1 },
+                title: false,
+                className: 'custom-viewer',
+                hidden: () => viewer.destroy()
             });
-
             viewer.show();
         }
 
-        // 初始化
+        // --- 3. (关键修复) 多图相册预览逻辑 ---
+        function viewGallery(containerId) {
+            const container = document.getElementById(containerId);
+            const viewer = new Viewer(container, {
+                navbar: true,
+                toolbar: { 
+                    zoomIn: 1, zoomOut: 1, oneToOne: 1, reset: 1, 
+                    prev: 1, play: 0, next: 1, 
+                    rotateLeft: 1, flipHorizontal: 1 
+                },
+                title: false,
+                className: 'custom-viewer',
+                hidden: () => viewer.destroy()
+            });
+            viewer.show();
+        }
+
+        // --- 4. 初始化 ---
         const urlParams = new URLSearchParams(window.location.search);
         const initialView = urlParams.get('view') || 'home';
-        
-        // 如果初始就在子页面，手动触发一下导航UI更新
-        if(initialView !== 'home') {
-            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
-            const target = document.getElementById('view-' + initialView);
-            if(target) target.classList.add('active');
-            updateBreadcrumb(initialView);
-        }
+        if (initialView !== 'home') navigateTo(initialView);
 
     </script>
 </body>
