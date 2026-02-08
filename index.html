@@ -8,11 +8,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/viewerjs/1.11.6/viewer.min.css">
 
     <style>
-        /* --- 核心样式 (保持深色科技风) --- */
+        /* ... (保持之前的 CSS 样式不变) ... */
         :root {
             --bg-color: #0f172a;
             --card-bg: #1e293b;
-            --primary-color: #0ea5e9; /* 更亮一点的蓝 */
+            --primary-color: #0ea5e9;
             --secondary-color: #6366f1;
             --text-main: #f8fafc;
             --text-sub: #94a3b8;
@@ -27,7 +27,6 @@
             min-height: 100vh; display: flex; flex-direction: column;
         }
 
-        /* Header */
         header {
             text-align: center; padding: 4rem 1rem 3rem;
             background: radial-gradient(circle at 50% 0%, #1e293b 0%, #0f172a 80%);
@@ -40,7 +39,6 @@
         }
         .subtitle { color: var(--text-sub); font-size: 1.1rem; max-width: 600px; margin: 0 auto; }
 
-        /* Navigation / Breadcrumb */
         .nav-bar {
             max-width: 1200px; margin: 0 auto; padding: 1.5rem 2rem; width: 100%; box-sizing: border-box;
             display: flex; align-items: center; font-size: 0.95rem; color: var(--text-sub);
@@ -50,18 +48,14 @@
         .nav-sep { margin: 0 0.8rem; color: #475569; }
         .nav-current { color: var(--primary-color); font-weight: 600; }
 
-        /* Main Content */
         main { flex-grow: 1; max-width: 1200px; margin: 0 auto; padding: 0 2rem 5rem; width: 100%; box-sizing: border-box; }
 
-        /* Sections & Transitions */
         .view-section { display: none; animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
         .view-section.active { display: block; }
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Grid */
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; margin-top: 1rem; }
 
-        /* Category Cards (Home) */
         .cat-card {
             background: linear-gradient(145deg, #1e293b, #0f172a);
             border: 1px solid var(--border-color); border-radius: 16px; padding: 2.5rem 2rem;
@@ -73,7 +67,6 @@
         .cat-desc { color: var(--text-sub); font-size: 0.95rem; line-height: 1.6; }
         .badge { position: absolute; top: 1rem; right: 1rem; background: rgba(14, 165, 233, 0.15); color: var(--primary-color); padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
 
-        /* Detail Cards */
         .item-card {
             background-color: var(--card-bg); border-radius: 12px; overflow: hidden;
             border: 1px solid var(--border-color); transition: transform 0.3s;
@@ -99,7 +92,6 @@
         .card-title { margin: 0 0 0.8rem 0; font-size: 1.25rem; font-weight: 600; line-height: 1.4; }
         .card-desc { color: var(--text-sub); font-size: 0.9rem; margin-bottom: 1.5rem; flex-grow: 1; }
 
-        /* Actions */
         .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: auto; }
         .btn {
             padding: 0.7rem; text-align: center; border-radius: 8px; text-decoration: none; font-size: 0.9rem; font-weight: 500; cursor: pointer; border: none; transition: all 0.2s;
@@ -110,16 +102,37 @@
         .btn-outline { border: 1px solid #475569; color: var(--text-main); background: transparent; }
         .btn-outline:hover { background: rgba(255,255,255,0.05); border-color: var(--text-sub); }
 
-        /* Viewer & Footer */
         .viewer-backdrop { background-color: rgba(15, 23, 42, 0.98) !important; }
         footer { text-align: center; padding: 3rem; color: #475569; font-size: 0.85rem; border-top: 1px solid var(--border-color); margin-top: 3rem; }
+        /* --- 新增的小按钮样式 --- */
+        .btn-mini {
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            padding: 8px;
+            font-size: 0.8rem;
+            color: var(--text-sub);
+            border: 1px solid #334155;
+            border-radius: 6px;
+            text-decoration: none;
+            background: rgba(255, 255, 255, 0.02);
+            transition: all 0.2s;
+        }
+        
+        /* 鼠标悬停时的发光效果 */
+        .btn-mini:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            background: rgba(14, 165, 233, 0.1);
+            transform: translateY(-2px);
+        }
     </style>
 </head>
 <body>
 
     <header>
         <h1>Liu Xuanyi's Portfolio</h1>
-        <p class="subtitle">测试开发工程师 · 接口测试 | 自动化测试 | CI/CD</p>
+        <p class="subtitle">测试开发工程师 · 功能测试 | 接口测试 | 自动化测试</p>
     </header>
 
     <div class="nav-bar">
@@ -129,8 +142,19 @@
     </div>
 
     <main>
+
         <section id="view-home" class="view-section active">
             <div class="grid">
+                <div class="cat-card" onclick="navigateTo('func')">
+                    <span class="badge">2 Modules</span>
+                    <div class="cat-icon">📊</div>
+                    <div class="cat-title">全栈功能测试策略</div>
+                    <div class="cat-desc">
+                        基于业务闭环的全链路测试设计，覆盖用户行为全流程。<br>
+                        重点保障：接口稳定性、状态合法性、异常处理机制与系统容错能力。
+                    </div>
+                </div>
+
                 <div class="cat-card" onclick="navigateTo('api')">
                     <span class="badge">4 Modules</span>
                     <div class="cat-icon">🧩</div>
@@ -150,16 +174,54 @@
                         重点关注：<span style="color:#818cf8">状态迁移合法性、并发抢座、数据一致性</span>。
                     </div>
                 </div>
+            </div>
+        </section>
 
-                <div class="cat-card" onclick="navigateTo('framework')">
-                    <span class="badge">Architecture</span>
-                    <div class="cat-icon">⚙️</div>
-                    <div class="cat-title">自动化架构 & CI/CD</div>
-                    <div class="cat-desc">
-                        基于 Pytest + Allure 的分层测试框架设计。<br>
-                        集成 Jenkins 流水线实现无人值守测试。
+        <section id="view-func" class="view-section">
+            <div class="grid">
+                <article class="item-card">
+                    <div class="preview-box" onclick="viewImage(this)">
+                        <img src="assets/images/login-func.png" alt="登录功能测试">
+                        <div class="preview-overlay"><span class="preview-btn">🔍 放大预览</span></div>
                     </div>
-                </div>
+                    <div class="card-body">
+                        <span class="card-tag">Auth & Security</span>
+                        <h3 class="card-title">登录模块功能测试</h3>
+                        <p class="card-desc">
+                            全流程覆盖的身份认证测试。
+                            <br><strong>核心测试点：</strong>
+                            <br>• 正常登录：手机号/账号密码登录、验证码登录。
+                            <br>• 异常场景：密码错误锁定、验证码失效、SQL注入攻击检测。
+                            <br>• 业务规则：多端互踢机制、Token过期自动刷新。
+                        </p>
+                        <div class="actions">
+                            <button class="btn btn-primary" onclick="triggerImgClick(this)">预览脑图</button>
+                            <a href="assets/files/login-func.xmind" class="btn btn-outline" download>下载 Xmind</a>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="item-card">
+                    <div class="preview-box" onclick="viewImage(this)">
+                        <img src="assets/images/studyroom-func.png" alt="自习室功能测试">
+                        <div class="preview-overlay"><span class="preview-btn">🔍 放大预览</span></div>
+                    </div>
+                    <div class="card-body">
+                        <span class="card-tag">Core Business</span>
+                        <h3 class="card-title">自习室业务闭环测试</h3>
+                        <p class="card-desc">
+                            从资源管理到用户使用的端到端测试。
+                            <br><strong>核心测试点：</strong>
+                            <br>• 资源管理：自习室的创建、编辑、上下架状态流转。
+                            <br>• 用户流程：加入、启动、暂停、结束学习的完整生命周期。
+                            <br>• 边界测试：满座处理、幂等处理。
+                        </p>
+                        <div class="actions">
+                            <button class="btn btn-primary" onclick="triggerImgClick(this)">预览脑图</button>
+                            <a href="assets/files/studyroom-func.xmind" class="btn btn-outline" download>下载 Xmind</a>
+                        </div>
+                    </div>
+                </article>
             </div>
         </section>
 
@@ -180,7 +242,7 @@
                         </p>
                         <div class="actions">
                             <button class="btn btn-primary" onclick="triggerImgClick(this)">预览脑图</button>
-                            <a href="assets/files/登录接口.xmind" class="btn btn-outline" download>下载 Xmind</a>
+                            <a href="assets/files/login.xmind" class="btn btn-outline" download>下载 Xmind</a>
                         </div>
                     </div>
                 </article>
@@ -199,19 +261,17 @@
                         </p>
                         <div class="actions">
                             <button class="btn btn-primary" onclick="triggerImgClick(this)">预览脑图</button>
-                            <a href="assets/files/创建自习室接口.xmind" class="btn btn-outline" download>下载 Xmind</a>
+                            <a href="assets/files/create-room.xmind" class="btn btn-outline" download>下载 Xmind</a>
                         </div>
                     </div>
                 </article>
 
-                <article class="item-card">
+<article class="item-card">
                     <div class="preview-box" id="gallery-room" onclick="viewGallery('gallery-room')">
-                        
                         <img src="assets/images/add-room.png" alt="加入自习室接口" style="display: block;">
                         <img src="assets/images/start-study.png" alt="开始学习接口" style="display: none;">
                         <img src="assets/images/stop-study.png" alt="暂停学习接口" style="display: none;">
                         <img src="assets/images/end-study.png" alt="结束学习接口" style="display: none;">
-
                         <div class="preview-overlay">
                             <span class="preview-btn">📸 查看图集 (4张)</span>
                         </div>
@@ -221,12 +281,21 @@
                         <span class="card-tag">Core Service</span>
                         <h3 class="card-title">学习生命周期管理</h3>
                         <p class="card-desc">
-                            聚合了自习室的加入，学习计时的开始/暂停/结束全套接口测试。
-                            <br>包含：自习室的加入，学习计时的开始/暂停/结束状态流转。
+                            聚合自习室加入及计时全流程。
+                            <br><strong>核心测试：</strong>状态流转逻辑与异常拦截。
                         </p>
-                        <div class="actions">
-                            <button class="btn btn-primary" onclick="viewGallery('gallery-room')">预览全套脑图</button>
-                            <a href="assets/files/自习室.xmind" class="btn btn-outline" download>下载 Xmind</a>
+                        
+                        <div style="margin-top: auto;">
+                            <button class="btn btn-primary" style="width: 100%; margin-bottom: 12px;" onclick="viewGallery('gallery-room')">
+                                👁️ 预览全套脑图
+                            </button>
+                            
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                                <a href="assets/files/add-room.xmind" class="btn-mini" download>📄 加入接口</a>
+                                <a href="assets/files/start-study.xmind" class="btn-mini" download>▶️ 开始接口</a>
+                                <a href="assets/files/stop-study.xmind" class="btn-mini" download>⏸️ 暂停接口</a>
+                                <a href="assets/files/end-study.xmind" class="btn-mini" download>⏹️ 结束接口</a>
+                            </div>
                         </div>
                     </div>
                 </article>
@@ -245,7 +314,7 @@
                         </p>
                         <div class="actions">
                             <button class="btn btn-primary" onclick="triggerImgClick(this)">预览脑图</button>
-                            <a href="assets/files/文件上传接口.xmind" class="btn btn-outline" download>下载 Xmind</a>
+                            <a href="assets/files/upload.xmind" class="btn btn-outline" download>下载 Xmind</a>
                         </div>
                     </div>
                 </article>
@@ -297,29 +366,6 @@
             </div>
         </section>
 
-        <section id="view-framework" class="view-section">
-            <div class="grid">
-                <article class="item-card">
-                    <div class="preview-box" onclick="viewImage(this)">
-                        <img src="assets/images/framework.png" alt="自动化架构">
-                        <div class="preview-overlay"><span class="preview-btn">🔍 放大预览</span></div>
-                    </div>
-                    <div class="card-body">
-                        <span class="card-tag">Pytest + Allure</span>
-                        <h3 class="card-title">接口自动化测试框架</h3>
-                        <p class="card-desc">
-                            基于 PO 模式分层设计。上述 Xmind 用例已全部转化为自动化脚本。
-                            <br><strong>亮点：</strong>使用 Fixture 进行数据初始化与清理，实现数据驱动（Data-Driven）测试。
-                        </p>
-                        <div class="actions">
-                            <button class="btn btn-primary" onclick="triggerImgClick(this)">预览架构</button>
-                            <a href="#" class="btn btn-outline">查看 GitHub</a>
-                        </div>
-                    </div>
-                </article>
-            </div>
-        </section>
-
     </main>
 
     <footer>
@@ -332,9 +378,9 @@
         // --- 1. 路由与导航逻辑 ---
         const viewTitles = {
             'home': '首页 Dashboard',
+            'func': '全栈功能测试策略 Function Tests', // 添加功能测试的标题
             'api': '单接口测试 Interface Modules',
-            'flow': '业务场景流 Business Scenarios',
-            'framework': '测试架构 Architecture'
+            'flow': '业务场景流 Business Scenarios'
         };
 
         function navigateTo(viewId) {
@@ -389,7 +435,7 @@
             viewer.show();
         }
 
-        // --- 3. (关键修复) 多图相册预览逻辑 ---
+        // --- 3. 多图相册预览逻辑 ---
         function viewGallery(containerId) {
             const container = document.getElementById(containerId);
             const viewer = new Viewer(container, {
